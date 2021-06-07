@@ -3,7 +3,7 @@
   100% { transform: translateY(100px); }
 }
 
-.blob {
+.wave > .blob {
   animation-name: wave;
   animation-duration: 2s;
   animation-iteration-count: infinite;
