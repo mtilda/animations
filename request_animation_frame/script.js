@@ -1,3 +1,4 @@
+const start = document.getElementById("start");
 const blobs = document.querySelectorAll(".blob");
 
 const wave = (timestamp) => {
@@ -8,4 +9,8 @@ const wave = (timestamp) => {
   window.requestAnimationFrame(wave);
 };
 
-window.requestAnimationFrame(wave);
+const waveAnimationRequest = null;
+start.addEventListener("click", () => {
+  window.cancelAnimationFrame(waveAnimationRequest);
+  waveAnimationRequest = window.requestAnimationFrame(wave);
+});
