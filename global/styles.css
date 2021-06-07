@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background: aliceblue;
+}
+
+.blob-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: none;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.blob {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: darkslateblue;
+}
