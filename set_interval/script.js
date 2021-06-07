@@ -1,4 +1,8 @@
+const start = document.getElementById("start");
+const stop = document.getElementById("stop");
 const blobs = document.querySelectorAll(".blob");
+
+let waveInterval = null;
 
 const wave = (timestamp) => {
   blobs.forEach((blob, index) => {
@@ -6,4 +10,11 @@ const wave = (timestamp) => {
   });
 };
 
-window.setInterval(() => wave(Date.now()), 16);
+start.addEventListener("click", () => {
+  window.clearInterval(waveInterval);
+  waveInterval = window.setInterval(() => wave(Date.now()), 16);
+});
+
+stop.addEventListener("click", () => {
+  window.clearInterval(waveInterval);
+});
