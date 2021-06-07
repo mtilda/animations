@@ -2,7 +2,7 @@ const start = document.getElementById("start");
 const stop = document.getElementById("stop");
 const blobs = document.querySelectorAll(".blob");
 
-let waveInterval = null;
+let waveIntervalID = null;
 
 const wave = (timestamp) => {
   blobs.forEach((blob, index) => {
@@ -11,10 +11,10 @@ const wave = (timestamp) => {
 };
 
 start.addEventListener("click", () => {
-  window.clearInterval(waveInterval);
-  waveInterval = window.setInterval(() => wave(Date.now()), 16);
+  window.clearInterval(waveIntervalID);
+  waveIntervalID = window.setInterval(() => wave(Date.now()), 16);
 });
 
 stop.addEventListener("click", () => {
-  window.clearInterval(waveInterval);
+  window.clearInterval(waveIntervalID);
 });
