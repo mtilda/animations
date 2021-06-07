@@ -15,25 +15,33 @@ body {
   position: relative;
 }
 
-button#start {
+.button-group {
   margin: 32px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  gap: 16px;
+}
+
+button {
   padding: 16px 32px;
   font-size: 32px;
-  background-color: lightgreen;
   border-radius: 8px;
   border: 2px solid grey;
   cursor: pointer;
   display: block;
-  position: absolute;
-  bottom: 0;
-  right: 0;
   outline-offset: 4px;
   outline-width: thick;
 }
-button#start:focus, button#start:hover {
-  background-color: limegreen;
-}
+
+button#start { background-color: lightgreen; }
+button#start:focus, button#start:hover { background-color: limegreen; }
 button#start:active { background-color: mediumseagreen; }
+
+button#stop { background-color: coral; }
+button#stop:focus, button#stop:hover { background-color: tomato; }
+button#stop:active { background-color: orangered; }
 
 .blob-container {
   height: 100vh;
