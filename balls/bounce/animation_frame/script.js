@@ -1,7 +1,15 @@
+/*================================
+        DOM NODE SELECTORS
+================================*/
+
 const startButton = document.getElementById('start');
 const stopButton = document.getElementById('stop');
 const ballDivs = document.querySelectorAll('.ball');
 const ballContainerDiv = document.querySelector('.ball-container');
+
+/*================================
+        CLASSES
+================================*/
 
 class Box {
   constructor(node, width, height, balls = []) {
@@ -94,6 +102,10 @@ class Ball {
   }
 }
 
+/*================================
+        GLOBAL VARIABLES
+================================*/
+
 const box = new Box(ballContainerDiv, 800, 500);
 const balls = [];
 
@@ -103,10 +115,18 @@ ballDivs.forEach((ballDiv) => {
 
 let animationRequestID = null;
 
+/*================================
+        GLOBAL FUNCTIONS
+================================*/
+
 const step = () => {
   balls.forEach((ball) => ball.step());
   animationRequestID = window.requestAnimationFrame(step);
 }
+
+/*================================
+        DOM EVENTS
+================================*/
 
 startButton.addEventListener('click', () => {
   window.cancelAnimationFrame(animationRequestID);
