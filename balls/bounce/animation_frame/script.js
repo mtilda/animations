@@ -45,6 +45,7 @@ class Ball {
     this.velocityX = 8 * (Math.random() - 0.5);
     this.velocityY = 8 * (Math.random() - 0.5);
 
+    this.gravitationalAcceleration = -0.02;
     this.bounceFrictionCoeff = 0.9;
     this.slidingFrictionCoeff = 0.99;
     this.dragCoeff = 0.999;
@@ -53,7 +54,7 @@ class Ball {
 
   applyGravity() {
     if (this.positionY > -this.box.height/2 + this.radius + 10) {
-      this.velocityY -= 0.02;
+      this.velocityY += this.gravitationalAcceleration;
     }
   }
 
