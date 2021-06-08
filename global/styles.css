@@ -59,4 +59,5 @@ button#stop:active { background-color: orangered; }
   height: 64px;
   border-radius: 50%;
   background-image: radial-gradient(farthest-corner at 16px 16px, #886c9e 0%, darkslateblue 100%);
+  box-shadow: 64px 64px 64px 16px rgba(11, 7, 34, 0.5);
 }
