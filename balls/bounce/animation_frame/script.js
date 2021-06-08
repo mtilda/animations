@@ -35,15 +35,18 @@ class Ball {
     this.node.style.height = 2 * this.radius + 'px';
     this.node.style.position = 'absolute';
 
+    this.topLimit     = this.box.height/2 - this.radius;
+    this.bottomLimit  = -this.topLimit;
+    this.rightLimit   = this.box.width/2 - this.radius;
+    this.leftLimit    = -this.rightLimit;
+
     this.positionX = 0;
     this.positionY = 0;
     this.velocityX = 8 * (Math.random() - 0.5);
     this.velocityY = 8 * (Math.random() - 0.5);
 
-    this.topLimit     = this.box.height/2 - this.radius;
-    this.bottomLimit  = -this.topLimit;
-    this.rightLimit   = this.box.width/2 - this.radius;
-    this.leftLimit    = -this.rightLimit;
+    this.bounceFrictionCoeff = 0.9;
+    this.slidingFrictionCoeff = 0.995;
   }
 
   fall() {
@@ -54,7 +57,7 @@ class Ball {
 
   bounceX(limit) {
     if (Math.abs(this.velocityX) > 0.5) {
-      this.velocityX = -0.9 * this.velocityX;
+      this.velocityX *= -this.bounceFrictionCoeff;
     } else {
       this.velocityX = 0;
       this.positionX = limit;
@@ -63,7 +66,7 @@ class Ball {
 
   bounceY(limit) {
     if (Math.abs(this.velocityY) > 0.5) {
-      this.velocityY = -0.9 * this.velocityY;
+      this.velocityY *= -this.bounceFrictionCoeff;
     } else {
       this.velocityY = 0;
       this.positionY = limit;
@@ -89,11 +92,11 @@ class Ball {
 
   boxFriction() {
     if (this.velocityY === 0 && (this.positionY <= this.bottomLimit || this.positionY >= this.topLimit)) {
-      this.velocityX *= 0.995;
+      this.velocityX *= this.slidingFrictionCoeff;
     }
 
     if (this.velocityX === 0 && (this.positionX <= this.leftLimit || this.positionX >= this.rightLimit)) {
-      this.velocityY *= 0.995;
+      this.velocityY *= this.slidingFrictionCoeff;
     }
   }
 
