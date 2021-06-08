@@ -1,9 +1,0 @@
-.ball {
-  transition: transform 2s ease-in-out;
-  /* default to down position */
-  transform: translateY(100px);
-}
-
-.ball.up {
-  transform: translateY(-100px);
-}
