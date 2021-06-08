@@ -45,7 +45,7 @@ button#stop { background-color: coral; }
 button#stop:focus, button#stop:hover { background-color: tomato; }
 button#stop:active { background-color: orangered; }
 
-.blob-container {
+.ball-container {
   height: 100vh;
   display: flex;
   flex-direction: row;
@@ -55,7 +55,7 @@ button#stop:active { background-color: orangered; }
   gap: 16px;
 }
 
-.blob {
+.ball {
   width: 64px;
   height: 64px;
   border-radius: 50%;

@@ -1,9 +1,9 @@
-.blob {
+.ball {
   transition: transform 2s ease-in-out;
   /* default to down position */
   transform: translateY(100px);
 }
 
-.blob.up {
+.ball.up {
   transform: translateY(-100px);
 }

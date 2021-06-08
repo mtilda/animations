@@ -1,6 +1,6 @@
 const start = document.getElementById("start");
 const stop = document.getElementById("stop");
-const blobs = document.querySelectorAll(".blob");
+const balls = document.querySelectorAll(".ball");
 
 // store IDs of all active intervals as they are set
 let intervalIDs = [];
@@ -12,18 +12,18 @@ const clearAllIntervals = () => {
   }
 }
 
-const wave = (blob) => {
-  blob.classList.toggle("up");
+const wave = (ball) => {
+  ball.classList.toggle("up");
 };
 
 start.addEventListener("click", () => {
   clearAllIntervals();
 
-  blobs.forEach((blob, index) => {
-    blob.classList.remove("up");
+  balls.forEach((ball, index) => {
+    ball.classList.remove("up");
     window.setTimeout(() => {  // delay each wave by 0.5s more than the last
       intervalIDs.push(
-        window.setInterval(() => wave(blob), 2000)  // call wave() every 2s
+        window.setInterval(() => wave(ball), 2000)  // call wave() every 2s
       );
     }, index * 500)
   });

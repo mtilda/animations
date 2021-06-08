@@ -1,6 +1,6 @@
 const start = document.getElementById("start");
 const stop = document.getElementById("stop");
-const bobContainer = document.querySelector(".blob-container");
+const bobContainer = document.querySelector(".ball-container");
 
 const startAnimation = () => {
   bobContainer.classList.add("wave");
