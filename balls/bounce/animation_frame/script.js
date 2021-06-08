@@ -46,10 +46,12 @@ class Ball {
     this.velocityY = 8 * (Math.random() - 0.5);
 
     this.bounceFrictionCoeff = 0.9;
-    this.slidingFrictionCoeff = 0.995;
+    this.slidingFrictionCoeff = 0.99;
+    this.dragCoeff = 0.999;
+    this.velocityLowerBound = 0.001;
   }
 
-  fall() {
+  applyGravity() {
     if (this.positionY > -this.box.height/2 + this.radius + 10) {
       this.velocityY -= 0.02;
     }
@@ -73,7 +75,7 @@ class Ball {
     };
   }
   
-  boxBounce() {
+  applyBoxBounce() {
     let newX = this.positionX + this.velocityX;
     let newY = this.positionY + this.velocityY;
     
@@ -90,7 +92,7 @@ class Ball {
     }
   }
 
-  boxFriction() {
+  applyBoxFriction() {
     if (this.velocityY === 0 && (this.positionY <= this.bottomLimit || this.positionY >= this.topLimit)) {
       this.velocityX *= this.slidingFrictionCoeff;
     }
@@ -98,6 +100,16 @@ class Ball {
     if (this.velocityX === 0 && (this.positionX <= this.leftLimit || this.positionX >= this.rightLimit)) {
       this.velocityY *= this.slidingFrictionCoeff;
     }
+  }
+
+  applyDrag() {
+    this.velocityX *= this.dragCoeff;
+    this.velocityY *= this.dragCoeff;
+  }
+
+  applyVelocityLowerBound() {
+    this.velocityX = Math.abs(this.velocityX) > this.velocityLowerBound ? this.velocityX : this.velocityLowerBound;
+    this.velocityY = Math.abs(this.velocityY) > this.velocityLowerBound ? this.velocityY : this.velocityLowerBound;
   }
 
   update() {
@@ -108,9 +120,11 @@ class Ball {
   }
   
   step() {
-    this.fall();
-    this.boxBounce();
-    this.boxFriction();
+    this.applyGravity();
+    this.applyBoxBounce();
+    this.applyBoxFriction();
+    this.applyDrag();
+    this.applyVelocityLowerBound();
 
     this.positionX += this.velocityX;
     this.positionY += this.velocityY;
