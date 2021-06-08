@@ -11,33 +11,20 @@ const ballContainerDiv = document.querySelector('.ball-container');
         CLASSES
 ================================*/
 
-class Box {
-  constructor(node, width, height, balls = []) {
-    this.node = node;
-    this.width = width;
-    this.height = height;
-
-    this.node.style.width = width + 16 + 'px';
-    this.node.style.height = height + 16 + 'px';
-    this.node.style.border = '8px solid black';
-    this.node.style.borderRadius = '8px';
-  }
-}
-
 class Ball {
-  constructor(node, radius, box) {
+  constructor(node, radius, boundaryBox) {
     this.node = node;
     this.radius = radius;
     this.radius = radius;
-    this.box = box;
+    this.boundaryBox = boundaryBox;
 
     this.node.style.width = 2 * this.radius + 'px';
     this.node.style.height = 2 * this.radius + 'px';
     this.node.style.position = 'absolute';
 
-    this.topLimit     = this.box.height/2 - this.radius;
+    this.topLimit     = this.boundaryBox.height/2 - this.radius;
     this.bottomLimit  = -this.topLimit;
-    this.rightLimit   = this.box.width/2 - this.radius;
+    this.rightLimit   = this.boundaryBox.width/2 - this.radius;
     this.leftLimit    = -this.rightLimit;
 
     this.positionX = 0;
@@ -53,7 +40,7 @@ class Ball {
   }
 
   applyGravity() {
-    if (this.positionY > -this.box.height/2 + this.radius + 10) {
+    if (this.positionY > -this.boundaryBox.height/2 + this.radius + 10) {
       this.velocityY += this.gravitationalAcceleration;
     }
   }
@@ -134,15 +121,27 @@ class Ball {
   }
 }
 
+class BoundaryBox {
+  constructor(node, width, height) {
+    this.node = node;
+    this.width = width;
+    this.height = height;
+
+    this.node.style.width = width + 16 + 'px';
+    this.node.style.height = height + 16 + 'px';
+    this.node.style.border = '8px solid black';
+    this.node.style.borderRadius = '8px';
+  }
+}
+
 /*================================
         GLOBAL VARIABLES
 ================================*/
 
-const box = new Box(ballContainerDiv, 800, 500);
+const boundaryBox = new BoundaryBox(ballContainerDiv, 800, 500);
 const balls = [];
-
 ballDivs.forEach((ballDiv) => {
-  balls.push(new Ball(ballDiv, 32, box));
+  balls.push(new Ball(ballDiv, 32, boundaryBox));
 });
 
 let animationRequestID = null;
