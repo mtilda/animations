@@ -27,12 +27,13 @@ body {
 button {
   padding: 16px 32px;
   font-size: 32px;
-  border-radius: 8px;
+  border-radius: 12px;
   border: 2px solid grey;
   cursor: pointer;
   display: block;
   outline-offset: 4px;
   outline-width: thick;
+  transition: background 0.1s;
 }
 
 button#start { background-color: lightgreen; }
