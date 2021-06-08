@@ -44,12 +44,18 @@ class Ball {
   }
 
   bounceY() {
-    if (this.velocityY >= 0 || this.velocityY < -0.5) {
+    if (this.velocityY > 0 || this.velocityY < -0.5) {
       this.velocityY = -0.9 * this.velocityY;
     } else {
       this.velocityY = 0;
       this.positionY = -this.box.height/2 + this.radius;
     };
+  }
+
+  frictionX() {
+    if (this.velocityY === 0 && this.positionY < -this.box.height/2 + this.radius + 1) {
+      this.velocityX *= 0.995;
+    }
   }
 
   boxBounce() {
@@ -79,6 +85,7 @@ class Ball {
   step() {
     this.fall();
     this.boxBounce();
+    this.frictionX();
 
     this.positionX += this.velocityX;
     this.positionY += this.velocityY;
