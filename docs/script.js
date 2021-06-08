@@ -11,33 +11,65 @@ const ballContainerDiv = document.querySelector('.ball-container');
         CLASSES
 ================================*/
 
-class Box {
-  constructor(node, width, height, balls = []) {
-    this.node = node;
-    this.width = width;
-    this.height = height;
+class AnimationGroup {
+  constructor(animatables) {
+    this.animatables = animatables;
+    this.animationRequestID = null;
+  }
 
-    this.node.style.width = width + 16 + 'px';
-    this.node.style.height = height + 16 + 'px';
-    this.node.style.border = '8px solid black';
-    this.node.style.borderRadius = '8px';
+  step() {
+    let someAreAnimated = false;
+    this.animatables.forEach((a) => {
+      if (a.idleFrames < a.maxIdleFrames) {
+        a.step();
+        someAreAnimated = true;
+        a.node.style.filter = 'brightness(100%)';
+      } else {
+        a.node.style.filter = 'brightness(60%)';
+      }
+    });
+
+    if (someAreAnimated) {
+      this.animationRequestID = window.requestAnimationFrame(this.step.bind(this));
+    }
+  }
+
+  start() {
+    this.animationRequestID = window.requestAnimationFrame(this.step.bind(this));
+  }
+
+  stop() {
+    window.cancelAnimationFrame(this.animationRequestID);
+    this.animationRequestID = null;
   }
 }
 
-class Ball {
-  constructor(node, radius, box) {
-    this.node = node;
+class Animatable {
+  constructor() {
+    this.maxIdleFrames = 4;
+    this.idleFrames = 0;
+  }
+
+  step() {
+    throw new Error('Animatables must have a method \'step\'');
+  }
+}
+
+class Ball extends Animatable {
+  constructor(node, radius, borderBox) {
+    super();
+    this.node   = node;
     this.radius = radius;
     this.radius = radius;
-    this.box = box;
+    borderBox   = borderBox;
 
-    this.node.style.width = 2 * this.radius + 'px';
-    this.node.style.height = 2 * this.radius + 'px';
-    this.node.style.position = 'absolute';
+    this.node.style.width     = 2 * this.radius + 'px';
+    this.node.style.height    = 2 * this.radius + 'px';
+    this.node.style.position  = 'absolute';
 
-    this.topLimit     = this.box.height/2 - this.radius;
+    this.topLimit     = borderBox.height/2 - this.radius;
     this.bottomLimit  = -this.topLimit;
-    this.rightLimit   = this.box.width/2 - this.radius;
+    this.rightLimit   = borderBox.width/2 - this.radius;
     this.leftLimit    = -this.rightLimit;
 
     this.positionX = 0;
@@ -45,15 +77,15 @@ class Ball {
     this.velocityX = 8 * (Math.random() - 0.5);
     this.velocityY = 8 * (Math.random() - 0.5);
 
-    this.gravitationalAcceleration = -0.02;
-    this.bounceFrictionCoeff = 0.9;
-    this.slidingFrictionCoeff = 0.99;
-    this.dragCoeff = 0.999;
-    this.velocityLowerBound = 0.001;
+    this.gravitationalAcceleration  = -0.02;
+    this.bounceFrictionCoeff        = 0.9;
+    this.slidingFrictionCoeff       = 0.99;
+    this.dragCoeff                  = 0.999;
+    this.minVelocity                = 0.001;
   }
 
   applyGravity() {
-    if (this.positionY > -this.box.height/2 + this.radius + 10) {
+    if (this.positionY > -borderBox.height/2 + this.radius + 10) {
       this.velocityY += this.gravitationalAcceleration;
     }
   }
@@ -108,9 +140,27 @@ class Ball {
     this.velocityY *= this.dragCoeff;
   }
 
-  applyVelocityLowerBound() {
-    this.velocityX = Math.abs(this.velocityX) > this.velocityLowerBound ? this.velocityX : this.velocityLowerBound;
-    this.velocityY = Math.abs(this.velocityY) > this.velocityLowerBound ? this.velocityY : this.velocityLowerBound;
+  applyVelocityZeroing() {
+    let isStopped = true;
+
+    if (Math.abs(this.velocityX) < this.minVelocity) {
+      this.velocityX = 0;
+    } else {
+      isStopped = false;
+    }
+
+    if (Math.abs(this.velocityY) < this.minVelocity) {
+      this.velocityY = 0;
+    } else {
+      isStopped = false;
+    }
+
+    // if motion stops, mark as idle
+    if (isStopped) {
+      this.idleFrames++;
+    } else {
+      this.idleFrames = 0;
+    }
   }
 
   update() {
@@ -125,7 +175,7 @@ class Ball {
     this.applyBoxBounce();
     this.applyBoxFriction();
     this.applyDrag();
-    this.applyVelocityLowerBound();
+    this.applyVelocityZeroing();
 
     this.positionX += this.velocityX;
     this.positionY += this.velocityY;
@@ -134,37 +184,47 @@ class Ball {
   }
 }
 
+class BorderBox {
+  constructor(node, width, height) {
+    this.node = node;
+    this.width = width;
+    this.height = height;
+
+    this.node.style.width = width + 16 + 'px';
+    this.node.style.height = height + 16 + 'px';
+    this.node.style.border = '8px solid black';
+    this.node.style.borderRadius = '8px';
+  }
+}
+
 /*================================
         GLOBAL VARIABLES
 ================================*/
 
-const box = new Box(ballContainerDiv, 800, 500);
+const borderBox = new BorderBox(ballContainerDiv, 800, 500);
 const balls = [];
-
 ballDivs.forEach((ballDiv) => {
-  balls.push(new Ball(ballDiv, 32, box));
+  balls.push(new Ball(ballDiv, 32, borderBox));
 });
 
-let animationRequestID = null;
+const ballAnimationGroup = new AnimationGroup(balls);
 
 /*================================
         GLOBAL FUNCTIONS
 ================================*/
 
-const step = () => {
-  balls.forEach((ball) => ball.step());
-  animationRequestID = window.requestAnimationFrame(step);
+const startAnimation = () => {
+  ballAnimationGroup.start();
+}
+
+const stopAnimation = () => {
+  ballAnimationGroup.stop();
 }
 
 /*================================
         DOM EVENTS
 ================================*/
 
-startButton.addEventListener('click', () => {
-  window.cancelAnimationFrame(animationRequestID);
-  animationRequestID = window.requestAnimationFrame(step);
-});
+startButton.addEventListener('click', startAnimation);
 
-stopButton.addEventListener('click', () => {
-  window.cancelAnimationFrame(animationRequestID);
-});
+stopButton.addEventListener('click', stopAnimation);
