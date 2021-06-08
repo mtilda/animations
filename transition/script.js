@@ -10,12 +10,7 @@ const clearAllIntervals = () => {
 }
 
 const wave = (blob) => {
-  // toggle "up" class
-  if (blob.classList.contains("up")) {
-    blob.classList.remove("up");
-  } else {
-    blob.classList.add("up");
-  }
+  blob.classList.toggle("up");
 };
 
 start.addEventListener("click", () => {
