@@ -2,11 +2,14 @@ const start = document.getElementById("start");
 const stop = document.getElementById("stop");
 const blobs = document.querySelectorAll(".blob");
 
-let lastIntervalID = 0;
+// store IDs of all active intervals as they are set
+let intervalIDs = [];
 
 const clearAllIntervals = () => {
-  for (let i = 1; i <= lastIntervalID; i++)
-    window.clearInterval(i);
+  while (intervalIDs.length > 0) {
+    window.clearInterval(intervalIDs[intervalIDs.length - 1]);
+    intervalIDs.pop();
+  }
 }
 
 const wave = (blob) => {
@@ -19,7 +22,9 @@ start.addEventListener("click", () => {
   blobs.forEach((blob, index) => {
     blob.classList.remove("up");
     window.setTimeout(() => {  // delay each wave by 0.5s more than the last
-      lastIntervalID = window.setInterval(() => wave(blob), 2000);  // call wave() every 2s
+      intervalIDs.push(
+        window.setInterval(() => wave(blob), 2000)  // call wave() every 2s
+      );
     }, index * 500)
   });
 });
