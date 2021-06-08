@@ -11,7 +11,8 @@ class Box {
 
     this.node.style.width = width + 16 + 'px';
     this.node.style.height = height + 16 + 'px';
-    this.node.style.border = '8px solid black'
+    this.node.style.border = '8px solid black';
+    this.node.style.borderRadius = '8px';
   }
 }
 
@@ -43,11 +44,11 @@ class Ball {
   }
 
   bounceY() {
-    if (this.velocityY < 0 && this.velocityY > -0.5) {
+    if (this.velocityY >= 0 || this.velocityY < -0.5) {
+      this.velocityY = -0.9 * this.velocityY;
+    } else {
       this.velocityY = 0;
       this.positionY = -this.box.height/2 + this.radius;
-    } else {
-      this.velocityY = -0.9 * this.velocityY;
     };
   }
 
