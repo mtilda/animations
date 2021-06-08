@@ -39,6 +39,11 @@ class Ball {
     this.positionY = 0;
     this.velocityX = 8 * (Math.random() - 0.5);
     this.velocityY = 8 * (Math.random() - 0.5);
+
+    this.topLimit     = this.box.height/2 - this.radius;
+    this.bottomLimit  = -this.topLimit;
+    this.rightLimit   = this.box.width/2 - this.radius;
+    this.leftLimit    = -this.rightLimit;
   }
 
   fall() {
@@ -47,39 +52,48 @@ class Ball {
     }
   }
 
-  bounceX() {
-    this.velocityX = -0.8 * this.velocityX;
-  }
-
-  bounceY() {
-    if (this.velocityY > 0 || this.velocityY < -0.5) {
-      this.velocityY = -0.9 * this.velocityY;
+  bounceX(limit) {
+    if (Math.abs(this.velocityX) > 0.5) {
+      this.velocityX = -0.9 * this.velocityX;
     } else {
-      this.velocityY = 0;
-      this.positionY = -this.box.height/2 + this.radius;
+      this.velocityX = 0;
+      this.positionX = limit;
     };
   }
 
-  frictionX() {
-    if (this.velocityY === 0 && this.positionY < -this.box.height/2 + this.radius + 1) {
-      this.velocityX *= 0.995;
-    }
+  bounceY(limit) {
+    if (Math.abs(this.velocityY) > 0.5) {
+      this.velocityY = -0.9 * this.velocityY;
+    } else {
+      this.velocityY = 0;
+      this.positionY = limit;
+    };
   }
-
+  
   boxBounce() {
     let newX = this.positionX + this.velocityX;
     let newY = this.positionY + this.velocityY;
+    
+    if (newX < this.leftLimit) {
+      this.bounceX(this.leftLimit);
+    } else if (newX > this.rightLimit) {
+      this.bounceX(this.rightLimit);
+    }
+    
+    if (newY < this.bottomLimit) {
+      this.bounceY(this.bottomLimit);
+    } else if (newY > this.topLimit) {
+      this.bounceY(this.topLimit);
+    }
+  }
 
-    if (newX < -this.box.width/2 + this.radius) {
-      this.bounceX();
-    } else if (newX > this.box.width/2 - this.radius) {
-      this.bounceX();
+  boxFriction() {
+    if (this.velocityY === 0 && (this.positionY <= this.bottomLimit || this.positionY >= this.topLimit)) {
+      this.velocityX *= 0.995;
     }
 
-    if (newY < -this.box.height/2 + this.radius) {
-      this.bounceY();
-    } else if (newY > this.box.height/2 - this.radius) {
-      this.bounceY();
+    if (this.velocityX === 0 && (this.positionX <= this.leftLimit || this.positionX >= this.rightLimit)) {
+      this.velocityY *= 0.995;
     }
   }
 
@@ -93,7 +107,7 @@ class Ball {
   step() {
     this.fall();
     this.boxBounce();
-    this.frictionX();
+    this.boxFriction();
 
     this.positionX += this.velocityX;
     this.positionY += this.velocityY;
