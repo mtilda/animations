@@ -9,8 +9,8 @@ class Box {
     this.width = width;
     this.height = height;
 
-    this.node.style.width = width + 'px';
-    this.node.style.height = height + 'px';
+    this.node.style.width = width + 16 + 'px';
+    this.node.style.height = height + 16 + 'px';
     this.node.style.border = '8px solid black'
   }
 }
@@ -28,8 +28,8 @@ class Ball {
 
     this.positionX = 0;
     this.positionY = 0;
-    this.velocityX = 2 * (Math.random() - 0.5);
-    this.velocityY = 2 * (Math.random() - 0.5);
+    this.velocityX = 8 * (Math.random() - 0.5);
+    this.velocityY = 8 * (Math.random() - 0.5);
   }
 
   fall() {
@@ -38,20 +38,28 @@ class Ball {
     }
   }
 
+  bounceX() {
+    this.velocityX = -0.9 * this.velocityX;
+  }
+
+  bounceY() {
+    this.velocityY = Math.abs(this.velocityY) > 1 ? -0.9 * this.velocityY : 0;
+  }
+
   boxBounce() {
     let newX = this.positionX + this.velocityX;
     let newY = this.positionY + this.velocityY;
 
     if (newX < -this.box.width/2 + this.radius) {
-      this.velocityX = -this.velocityX;
+      this.bounceX();
     } else if (newX > this.box.width/2 - this.radius) {
-      this.velocityX = -this.velocityX;
+      this.bounceX();
     }
 
     if (newY < -this.box.height/2 + this.radius) {
-      this.velocityY = -this.velocityY;
+      this.bounceY();
     } else if (newY > this.box.height/2 - this.radius) {
-      this.velocityY = -this.velocityY;
+      this.bounceY();
     }
   }
 
@@ -80,7 +88,6 @@ ballDivs.forEach((ballDiv) => {
   balls.push(new Ball(ballDiv, 32, box));
 });
 
-console.log(balls);
 let animationRequestID = null;
 
 const step = () => {
