@@ -39,11 +39,16 @@ class Ball {
   }
 
   bounceX() {
-    this.velocityX = -0.9 * this.velocityX;
+    this.velocityX = -0.8 * this.velocityX;
   }
 
   bounceY() {
-    this.velocityY = Math.abs(this.velocityY) > 1 ? -0.9 * this.velocityY : 0;
+    if (this.velocityY < 0 && this.velocityY > -0.5) {
+      this.velocityY = 0;
+      this.positionY = -this.box.height/2 + this.radius;
+    } else {
+      this.velocityY = -0.9 * this.velocityY;
+    };
   }
 
   boxBounce() {
