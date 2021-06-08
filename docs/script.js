@@ -56,20 +56,20 @@ class Animatable {
 }
 
 class Ball extends Animatable {
-  constructor(node, radius, borderBox) {
+  constructor(node, radius, boundaryBox) {
     super();
     this.node   = node;
     this.radius = radius;
     this.radius = radius;
-    borderBox   = borderBox;
+    boundaryBox = boundaryBox;
 
     this.node.style.width     = 2 * this.radius + 'px';
     this.node.style.height    = 2 * this.radius + 'px';
     this.node.style.position  = 'absolute';
 
-    this.topLimit     = borderBox.height/2 - this.radius;
+    this.topLimit     = boundaryBox.height/2 - this.radius;
     this.bottomLimit  = -this.topLimit;
-    this.rightLimit   = borderBox.width/2 - this.radius;
+    this.rightLimit   = boundaryBox.width/2 - this.radius;
     this.leftLimit    = -this.rightLimit;
 
     this.positionX = 0;
@@ -85,7 +85,7 @@ class Ball extends Animatable {
   }
 
   applyGravity() {
-    if (this.positionY > -borderBox.height/2 + this.radius + 10) {
+    if (this.positionY > -boundaryBox.height/2 + this.radius + 10) {
       this.velocityY += this.gravitationalAcceleration;
     }
   }
@@ -184,7 +184,7 @@ class Ball extends Animatable {
   }
 }
 
-class BorderBox {
+class boundaryBox {
   constructor(node, width, height) {
     this.node = node;
     this.width = width;
@@ -201,10 +201,10 @@ class BorderBox {
         GLOBAL VARIABLES
 ================================*/
 
-const borderBox = new BorderBox(ballContainerDiv, 800, 500);
+const boundaryBox = new boundaryBox(ballContainerDiv, 800, 500);
 const balls = [];
 ballDivs.forEach((ballDiv) => {
-  balls.push(new Ball(ballDiv, 32, borderBox));
+  balls.push(new Ball(ballDiv, 32, boundaryBox));
 });
 
 const ballAnimationGroup = new AnimationGroup(balls);
