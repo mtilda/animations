@@ -32,6 +32,12 @@ class Ball {
     this.velocityY = 2 * (Math.random() - 0.5);
   }
 
+  fall() {
+    if (this.positionY > -this.box.height/2 + this.radius + 10) {
+      this.velocityY -= 0.02;
+    }
+  }
+
   boxBounce() {
     let newX = this.positionX + this.velocityX;
     let newY = this.positionY + this.velocityY;
@@ -51,12 +57,13 @@ class Ball {
 
   update() {
     this.node.style.transform = `translate(
-      ${this.positionX}px,
-      ${this.positionY}px
+      ${-this.positionX}px,
+      ${-this.positionY}px
     )`
   }
   
   step() {
+    this.fall();
     this.boxBounce();
 
     this.positionX += this.velocityX;
