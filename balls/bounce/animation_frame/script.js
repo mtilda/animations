@@ -15,12 +15,11 @@ class Ball {
   constructor(node, radius, boundaryBox) {
     this.node = node;
     this.radius = radius;
-    this.radius = radius;
     this.boundaryBox = boundaryBox;
 
-    this.node.style.width = 2 * this.radius + 'px';
-    this.node.style.height = 2 * this.radius + 'px';
-    this.node.style.position = 'absolute';
+    this.node.style.width     = 2 * this.radius + 'px';
+    this.node.style.height    = 2 * this.radius + 'px';
+    this.node.style.position  = 'absolute';
 
     this.topLimit     = this.boundaryBox.height/2 - this.radius;
     this.bottomLimit  = -this.topLimit;
